@@ -5,6 +5,13 @@ const router = express.Router();
 const authController = require("../controllers/auth_controller");
 
 // index route
-router.get("/", authController.signIn);
+router.get("/", (_, res) => {
+  return res.status(200).json({
+    message: "MyDrive API is working",
+  });
+});
+
+// signUp route
+router.post("/signUp", authController.signUp);
 
 module.exports = router;
