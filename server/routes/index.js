@@ -6,6 +6,10 @@ const upload = require("../configs/multer");
 const authController = require("../controllers/auth_controller");
 const fileController = require("../controllers/file_controller");
 
+// auth middleware
+// const auth = require("../middlewares/auth").verifyToken;
+const { verifyToken } = require("../middlewares/auth");
+
 // index route
 router.get("/", (_, res) => {
   return res.status(200).json({
@@ -20,6 +24,14 @@ router.post("/signUp", authController.signUp);
 router.post("/signIn", authController.signIn);
 
 // upload route
-router.post("/upload", upload.single("file"), fileController.uploadFile);
+router.post(
+  "/upload",
+  verifyToken, // middleware to authorize user
+  upload.single("file"),
+  fileController.uploadFile
+);
+
+// getUserFiles route
+router.get("/getUserFiles", verifyToken, fileController.getUserFiles);
 
 module.exports = router;
