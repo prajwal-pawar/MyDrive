@@ -14,4 +14,7 @@ router.get("/", (_, res) => {
 // signUp route
 router.post("/signUp", authController.signUp);
 
+// signIn route
+router.post("/signIn", authController.signIn);
+
 module.exports = router;
