@@ -42,7 +42,7 @@ module.exports.getUserFiles = async (req, res) => {
   try {
     // find user by user id
     // let user = await User.findOne({ _id: req.userId });
-    // find file by filename
+    // find file by current user which is in req
     let files = await File.find({ user: req.userId });
 
     return res.status(200).json({

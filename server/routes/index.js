@@ -8,6 +8,7 @@ const fileController = require("../controllers/file_controller");
 
 // auth middleware
 // const auth = require("../middlewares/auth").verifyToken;
+// or destructure the middleware
 const { verifyToken } = require("../middlewares/auth");
 
 // index route
