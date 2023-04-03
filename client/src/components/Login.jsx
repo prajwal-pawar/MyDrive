@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Grid, TextField, Button } from "@mui/material";
 
-const Register = () => {
+const Login = () => {
   return (
     <div>
       <Grid
@@ -12,7 +12,7 @@ const Register = () => {
         alignItems="center"
         minHeight="100vh"
       >
-        <h1 style={{ margin: "-100px 0px 10px 0px" }}>Register</h1>
+        <h1 style={{ margin: "-100px 0px 10px 0px" }}>Login</h1>
 
         <TextField
           type="text"
@@ -30,15 +30,15 @@ const Register = () => {
         />
 
         <Button variant="contained" style={{ padding: "10px 20px" }}>
-          Sign up
+          Sign in
         </Button>
 
-        <Link to="/login" style={{ marginTop: "20px" }}>
-          Already have an account?
+        <Link to="/register" style={{ marginTop: "20px" }}>
+          Don't have an account?
         </Link>
       </Grid>
     </div>
   );
 };
 
-export default Register;
+export default Login;
