@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Grid, TextField, Button, Alert } from "@mui/material";
 import axios from "axios";
 
@@ -10,6 +10,9 @@ const Login = () => {
   // ref's for getting input
   const usernameRef = useRef();
   const passwordRef = useRef();
+
+  // to redirect user
+  const navigate = useNavigate();
 
   // login user
   const loginUser = async () => {
@@ -26,10 +29,16 @@ const Login = () => {
 
       console.log(response);
 
+      // save JWT/bearer token in localstorage to persistent user session
+      localStorage.setItem("token", response.data.token);
+
       // send message as per API response to notify user
       setMessage(response.data.message);
       // set error as false
       setError(false);
+
+      // redirect to login page
+      navigate("/");
     } catch (err) {
       console.log(err);
 
