@@ -1,9 +1,13 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
+import { Button, Alert, Divider, Grid } from "@mui/material";
 import axios from "axios";
 
 const Home = () => {
+  // states for error and success messages
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState(false);
+
   // get JWT/bearer token from localstorage
   const token = localStorage.getItem("token");
   // to redirect user
@@ -47,14 +51,37 @@ const Home = () => {
       );
 
       console.log(response);
+
+      // send message as per API response to notify user
+      setMessage(response.data.message);
+      // set error as false
+      setError(false);
     } catch (err) {
       console.log(err);
+
+      // set error as true
+      setError(true);
+      // send message as per API response to notify user
+      setMessage(err.response.data.message);
     }
   };
 
   return (
     <div>
       <h1 style={{ textAlign: "center", margin: "20px 0px" }}>MyDrive</h1>
+
+      <Grid container display="flex" justifyContent="center">
+        {/* if there is message, notify as per API response otherwise null */}
+        {message ? (
+          <Alert
+            // if error is true set severity as error otherwise success
+            severity={error ? "error" : "success"}
+            style={{ margin: "20px 0px" }}
+          >
+            {message}
+          </Alert>
+        ) : null}
+      </Grid>
 
       <div style={{ textAlign: "center" }}>
         <label htmlFor="uploadBtn">
@@ -65,10 +92,17 @@ const Home = () => {
             ref={fileRef}
             onChange={uploadFiles} // on changing file
           />
-          <Button color="primary" variant="contained" component="span">
+          <Button
+            color="primary"
+            variant="contained"
+            component="span"
+            style={{ marginBottom: "20px" }}
+          >
             Upload Files
           </Button>
         </label>
+
+        <Divider />
       </div>
     </div>
   );
