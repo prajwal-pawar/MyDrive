@@ -1,6 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Alert, Divider, Grid } from "@mui/material";
+import {
+  Button,
+  Alert,
+  Divider,
+  Grid,
+  Card,
+  CardContent,
+  Typography,
+  CardActions,
+  Box,
+} from "@mui/material";
 import axios from "axios";
 
 const Home = () => {
@@ -140,20 +150,44 @@ const Home = () => {
             Upload Files
           </Button>
         </label>
-
-        <Divider />
-
-        {/* show user files */}
-        <div>
-          {files.map((file, i) => (
-            <div>
-              <h2>{file.name}</h2>
-              <h2>{file.path}</h2>
-              <h2>{file.updatedAt}</h2>
-            </div>
-          ))}
-        </div>
       </div>
+
+      <Divider />
+
+      {/* show user files */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          flexWrap: "wrap",
+          justifyContent: "space-evenly",
+          margin: "20px 20px",
+        }}
+      >
+        {files.map((file, i) => (
+          <Card sx={{ margin: "20px", width: "300px" }} key={i}>
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {file.name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {file.type}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {file.size}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {file.updatedAt}
+              </Typography>
+            </CardContent>
+
+            <CardActions>
+              <Button size="small">Download</Button>
+              <Button size="small">Delete</Button>
+            </CardActions>
+          </Card>
+        ))}
+      </Box>
     </div>
   );
 };
