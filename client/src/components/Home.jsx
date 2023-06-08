@@ -4,9 +4,11 @@ import { Button, Alert, Divider, Grid } from "@mui/material";
 import axios from "axios";
 
 const Home = () => {
-  // states for error and success messages
+  // state hooks for error and success messages
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
+  // state hooks for setting user files
+  const [files, setFiles] = useState([]);
 
   // get JWT/bearer token from localstorage
   const token = localStorage.getItem("token");
@@ -20,7 +22,10 @@ const Home = () => {
     if (!token) {
       return navigate("/login");
     }
-  }, [token]);
+
+    // get user files
+    getUserFiles();
+  }, [token, files]);
 
   // upload files
   const uploadFiles = async () => {
@@ -51,6 +56,40 @@ const Home = () => {
       );
 
       console.log(response);
+
+      // send message as per API response to notify user
+      setMessage(response.data.message);
+      // set error as false
+      setError(false);
+    } catch (err) {
+      console.log(err);
+
+      // set error as true
+      setError(true);
+      // send message as per API response to notify user
+      setMessage(err.response.data.message);
+    }
+  };
+
+  // get user files
+  const getUserFiles = async () => {
+    try {
+      // get response from server for getUserFiles API
+      const response = await axios.get(
+        "http://localhost:8000/getUserFiles",
+        // sending headers to getUserFiles API
+        {
+          headers: {
+            // sending authorization header to send JWT as bearer token to authorize getUserFiles request
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log(response);
+
+      // set files after response
+      setFiles(response.data.files);
 
       // send message as per API response to notify user
       setMessage(response.data.message);
@@ -103,6 +142,17 @@ const Home = () => {
         </label>
 
         <Divider />
+
+        {/* show user files */}
+        <div>
+          {files.map((file, i) => (
+            <div>
+              <h2>{file.name}</h2>
+              <h2>{file.path}</h2>
+              <h2>{file.updatedAt}</h2>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
