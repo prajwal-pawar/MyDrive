@@ -10,6 +10,14 @@ const fileSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    type: {
+      type: String,
+      required: true,
+    },
+    size: {
+      type: Number,
+      required: true,
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
     },

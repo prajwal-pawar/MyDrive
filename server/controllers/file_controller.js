@@ -20,6 +20,8 @@ module.exports.uploadFile = async (req, res) => {
     file = new File({
       path: req.file.path,
       name: req.file.originalname,
+      type: req.file.mimetype,
+      size: req.file.size,
       user: req.userId, // which user uploaded file
     });
 
