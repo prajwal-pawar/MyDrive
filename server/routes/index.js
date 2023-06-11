@@ -28,11 +28,14 @@ router.post("/signIn", authController.signIn);
 router.post(
   "/upload",
   verifyToken, // middleware to authorize user
-  upload.single("file"),
+  upload.single("file"), // multer middleware to upload files
   fileController.uploadFile
 );
 
 // getUserFiles route
 router.get("/getUserFiles", verifyToken, fileController.getUserFiles);
+
+// deleteUserFiles route
+router.post("/deleteUserFiles", verifyToken, fileController.deleteUserFiles);
 
 module.exports = router;

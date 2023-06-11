@@ -2,6 +2,8 @@
 const File = require("../models/file");
 // user schema
 const User = require("../models/user");
+const fs = require("fs");
+const path = require("path");
 
 // upload file
 module.exports.uploadFile = async (req, res) => {
@@ -44,11 +46,47 @@ module.exports.getUserFiles = async (req, res) => {
   try {
     // find user by user id
     // let user = await User.findOne({ _id: req.userId });
+
     // find file by current user which is in req
     let files = await File.find({ user: req.userId });
 
     return res.status(200).json({
       files,
+    });
+  } catch (err) {
+    console.log(err);
+
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
+// delete user files
+module.exports.deleteUserFiles = async (req, res) => {
+  try {
+    // find file by file name
+    let file = await File.findOne({ name: req.body.filename });
+
+    console.log(file);
+
+    // deleting file from local uploads folder
+    fs.rm(
+      // getting uploads folder path and deleting file
+      path.join(__dirname, "../uploads/", req.userId + file.name),
+      {
+        recursive: true,
+      },
+      (err) => {
+        return;
+      }
+    );
+
+    // deleting file from DB
+    await file.deleteOne();
+
+    return res.status(200).json({
+      message: "File deleted",
     });
   } catch (err) {
     console.log(err);
