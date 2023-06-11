@@ -37,6 +37,11 @@ const Home = () => {
     getUserFiles();
   }, [token, files]);
 
+  // function to format date
+  const formatDate = (date) => {
+    return new Date(date).toLocaleDateString();
+  };
+
   // upload files
   const uploadFiles = async () => {
     try {
@@ -96,10 +101,46 @@ const Home = () => {
         }
       );
 
-      console.log(response);
+      // console.log(response);
 
       // set files after response
       setFiles(response.data.files);
+
+      // send message as per API response to notify user
+      setMessage(response.data.message);
+      // set error as false
+      setError(false);
+    } catch (err) {
+      console.log(err);
+
+      // set error as true
+      setError(true);
+      // send message as per API response to notify user
+      setMessage(err.response.data.message);
+    }
+  };
+
+  // delete user files
+  const deleteUserFiles = async (file) => {
+    let filename = file.name;
+
+    try {
+      // get response from server for deleteUserFiles API
+      const response = await axios.post(
+        "http://localhost:8000/deleteUserFiles",
+        {
+          filename,
+        },
+        // sending headers to deleteUserFiles API
+        {
+          headers: {
+            // sending authorization header to send JWT as bearer token to authorize deleteUserFiles request
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log(response);
 
       // send message as per API response to notify user
       setMessage(response.data.message);
@@ -164,6 +205,7 @@ const Home = () => {
           margin: "20px 20px",
         }}
       >
+        {/* map or search through user files */}
         {files.map((file, i) => (
           <Card sx={{ margin: "20px", width: "300px" }} key={i}>
             <CardContent>
@@ -174,16 +216,22 @@ const Home = () => {
                 {file.type}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {file.size}
+                {/* {file.size} */}
+                {/* converting file size from KB to MB */}
+                {parseFloat(file.size / 1024 / 1024).toFixed(3) + " MB"}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {file.updatedAt}
+                {/* {file.updatedAt} */}
+                {formatDate(file.updatedAt)}
               </Typography>
             </CardContent>
 
             <CardActions>
               <Button size="small">Download</Button>
-              <Button size="small">Delete</Button>
+              {/* <Button size="small" onClick={() => deleteUserFiles(file.name)}> */}
+              <Button size="small" onClick={() => deleteUserFiles(file)}>
+                Delete
+              </Button>
             </CardActions>
           </Card>
         ))}
