@@ -35,7 +35,7 @@ const Home = () => {
 
     // get user files
     getUserFiles();
-  }, [token, files]);
+  }, [token]);
 
   // function to format date
   const formatDate = (date) => {
@@ -70,7 +70,10 @@ const Home = () => {
         }
       );
 
-      console.log(response);
+      console.log(response.data);
+
+      // update user files to include the newly added files
+      setFiles((prevFiles) => [...prevFiles, response.data.file]);
 
       // send message as per API response to notify user
       setMessage(response.data.message);
@@ -140,12 +143,55 @@ const Home = () => {
         }
       );
 
-      console.log(response);
+      console.log(response.data);
+
+      // remove the deleted file from file state
+      setFiles(files.filter((file) => file.name !== filename));
 
       // send message as per API response to notify user
       setMessage(response.data.message);
       // set error as false
       setError(false);
+    } catch (err) {
+      console.log(err);
+
+      // set error as true
+      setError(true);
+      // send message as per API response to notify user
+      setMessage(err.response.data.message);
+    }
+  };
+
+  // download user files
+  const downloadUserFile = async (fileId) => {
+    try {
+      // get response from server for downloadUserFile API
+      const response = await axios.get(
+        `http://localhost:8000/downloadUserFile/${fileId}`,
+        // sending headers to downloadUserFile API
+        {
+          // necessary for downloading a file
+          responseType: "blob",
+          headers: {
+            // sending authorization header to send JWT as bearer token to authorize downloadUserFile request
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("res", response.data);
+
+      // creating object URL from response data
+      // const blob = new Blob([response.data]);
+      const blob = new Blob([response.data]);
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("download", fileId);
+      document.body.appendChild(link);
+      link.click();
+
+      // cleanup
+      window.URL.revokeObjectURL(url);
     } catch (err) {
       console.log(err);
 
@@ -227,9 +273,15 @@ const Home = () => {
             </CardContent>
 
             <CardActions>
-              <Button size="small">Download</Button>
+              <Button size="small" onClick={() => downloadUserFile(file._id)}>
+                Download
+              </Button>
               {/* <Button size="small" onClick={() => deleteUserFiles(file.name)}> */}
-              <Button size="small" onClick={() => deleteUserFiles(file)}>
+              <Button
+                size="small"
+                color="error"
+                onClick={() => deleteUserFiles(file)}
+              >
                 Delete
               </Button>
             </CardActions>
@@ -241,3 +293,5 @@ const Home = () => {
 };
 
 export default Home;
+
+// https://blog.yogeshchavan.dev/build-an-app-with-file-upload-and-download-functionality-and-image-preview-using-mern-stack

@@ -38,4 +38,11 @@ router.get("/getUserFiles", verifyToken, fileController.getUserFiles);
 // deleteUserFiles route
 router.post("/deleteUserFiles", verifyToken, fileController.deleteUserFiles);
 
+// downloadUserFile route
+router.get(
+  "/downloadUserFile/:id",
+  verifyToken,
+  fileController.downloadUserFile
+);
+
 module.exports = router;

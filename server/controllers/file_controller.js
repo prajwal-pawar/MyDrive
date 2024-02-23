@@ -31,6 +31,7 @@ module.exports.uploadFile = async (req, res) => {
 
     return res.status(200).json({
       message: "File uploaded",
+      file,
     });
   } catch (err) {
     console.log(err);
@@ -87,6 +88,32 @@ module.exports.deleteUserFiles = async (req, res) => {
 
     return res.status(200).json({
       message: "File deleted",
+    });
+  } catch (err) {
+    console.log(err);
+
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
+// download user file
+module.exports.downloadUserFile = async (req, res) => {
+  try {
+    let file = await File.findById(req.params.id);
+
+    // if user in file doesnt match user in jwt token
+    // then user is unauthorized
+    // user that requested file is not the user that uploaded a file
+    if (file.user != req.userId) {
+      return res.status(401).json({
+        message: "Unauthorized request",
+      });
+    }
+
+    return res.status(200).json({
+      file,
     });
   } catch (err) {
     console.log(err);
