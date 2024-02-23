@@ -12,6 +12,8 @@ import {
   Box,
 } from "@mui/material";
 import axios from "axios";
+import moment from "moment";
+import byteToSize from "../../utils/byteToSize";
 
 const Home = () => {
   // state hooks for error and success messages
@@ -36,11 +38,6 @@ const Home = () => {
     // get user files
     getUserFiles();
   }, [token]);
-
-  // function to format date
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString();
-  };
 
   // upload files
   const uploadFiles = async () => {
@@ -262,13 +259,12 @@ const Home = () => {
                 {file.type}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {/* {file.size} */}
                 {/* converting file size from KB to MB */}
-                {parseFloat(file.size / 1024 / 1024).toFixed(3) + " MB"}
+                {byteToSize(file.size)}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 {/* {file.updatedAt} */}
-                {formatDate(file.updatedAt)}
+                {moment(file.updatedAt).format("Do MMMM YYYY")}
               </Typography>
             </CardContent>
 
