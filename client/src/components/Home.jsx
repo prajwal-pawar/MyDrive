@@ -294,5 +294,3 @@ const Home = () => {
 };
 
 export default Home;
-
-// https://blog.yogeshchavan.dev/build-an-app-with-file-upload-and-download-functionality-and-image-preview-using-mern-stack
