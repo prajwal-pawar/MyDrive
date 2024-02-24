@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Button,
-  Alert,
   Divider,
   Grid,
   Card,
@@ -13,6 +12,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import moment from "moment";
+import Notifications from "./Notifications";
 import byteToSize from "../utils/byteToSize";
 import isTokenExpired from "../utils/checkExpireToken";
 
@@ -212,15 +212,7 @@ const Home = () => {
 
       <Grid container display="flex" justifyContent="center">
         {/* if there is message, notify as per API response otherwise null */}
-        {message ? (
-          <Alert
-            // if error is true set severity as error otherwise success
-            severity={error ? "error" : "success"}
-            style={{ margin: "20px 0px" }}
-          >
-            {message}
-          </Alert>
-        ) : null}
+        {message ? <Notifications error={error} message={message} /> : null}
       </Grid>
 
       <div style={{ textAlign: "center" }}>
