@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Grid, TextField, Button, Alert } from "@mui/material";
+import { Grid, TextField, Button } from "@mui/material";
 import axios from "axios";
+import Notifications from "./Notifications";
 
 const Login = () => {
   // states for error and success messages
