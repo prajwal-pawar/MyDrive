@@ -31,7 +31,6 @@ const Notifications = (props) => {
       <Alert
         // if error is true set severity as error otherwise success
         severity={error ? "error" : "success"}
-        variant="filled"
         onClose={handleClose}
       >
         {message}
