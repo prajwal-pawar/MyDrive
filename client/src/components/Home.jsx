@@ -13,7 +13,8 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import moment from "moment";
-import byteToSize from "../../utils/byteToSize";
+import byteToSize from "../utils/byteToSize";
+import isTokenExpired from "../utils/checkExpireToken";
 
 const Home = () => {
   // state hooks for error and success messages
@@ -32,6 +33,12 @@ const Home = () => {
   useEffect(() => {
     // if token doesnt exists, return to login
     if (!token) {
+      return navigate("/login");
+    }
+
+    // if token is expired, delete token
+    if (isTokenExpired) {
+      localStorage.removeItem("token");
       return navigate("/login");
     }
 
