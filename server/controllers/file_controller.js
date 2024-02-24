@@ -112,9 +112,13 @@ module.exports.downloadUserFile = async (req, res) => {
       });
     }
 
-    return res.status(200).json({
-      file,
+    // set content type as file type (image/png, application/js)
+    res.set({
+      "Content-Type": file.type,
     });
+
+    // send file to client as response
+    res.sendFile(path.join(file.path));
   } catch (err) {
     console.log(err);
 

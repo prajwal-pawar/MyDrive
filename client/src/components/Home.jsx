@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import moment from "moment";
+import download from "downloadjs";
 import Notifications from "./Notifications";
 import byteToSize from "../utils/byteToSize";
 import isTokenExpired from "../utils/checkExpireToken";
@@ -167,8 +168,13 @@ const Home = () => {
   };
 
   // download user files
-  const downloadUserFile = async (fileId) => {
+  const downloadUserFile = async (file) => {
     try {
+      let fileId = file._id;
+      let filePath = file.path;
+      let fileType = file.type;
+      let fileName = file.name;
+
       // get response from server for downloadUserFile API
       const response = await axios.get(
         `http://localhost:8000/downloadUserFile/${fileId}`,
@@ -185,17 +191,7 @@ const Home = () => {
 
       console.log("res", response.data);
 
-      // creating object URL from response data
-      // const blob = new Blob([response.data]);
-      const blob = new Blob([response.data]);
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.setAttribute("download", fileId);
-      document.body.appendChild(link);
-      link.click();
-
-      // cleanup
-      window.URL.revokeObjectURL(url);
+      return download(response.data, fileName, fileType);
     } catch (err) {
       console.log(err);
 
@@ -243,13 +239,23 @@ const Home = () => {
           display: "flex",
           flexDirection: "row",
           flexWrap: "wrap",
-          justifyContent: "space-evenly",
           margin: "20px 20px",
         }}
       >
         {/* map or search through user files */}
         {files.map((file, i) => (
-          <Card sx={{ margin: "20px", width: "300px" }} key={i}>
+          <Card
+            sx={{
+              margin: "20px",
+              width: "300px",
+              height: "250px",
+              maxHeight: "250px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+            key={i}
+          >
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
                 {file.name}
@@ -268,7 +274,7 @@ const Home = () => {
             </CardContent>
 
             <CardActions>
-              <Button size="small" onClick={() => downloadUserFile(file._id)}>
+              <Button size="small" onClick={() => downloadUserFile(file)}>
                 Download
               </Button>
               {/* <Button size="small" onClick={() => deleteUserFiles(file.name)}> */}
