@@ -1,3 +1,4 @@
+// function to convert bytes into size
 function byteToSize(bytes) {
   const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
 
