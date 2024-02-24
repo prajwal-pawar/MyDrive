@@ -5,7 +5,7 @@ const checkExpireToken = () => {
   const token = localStorage.getItem("token");
 
   // decode jwt
-  const decoded = jwtDecode(token);
+  const decoded = token ? jwtDecode(token) : null;
 
   // check if jwt token is expired
   if (decoded && Date.now() >= decoded.exp * 1000) {
