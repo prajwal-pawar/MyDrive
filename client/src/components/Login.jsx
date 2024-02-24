@@ -62,15 +62,7 @@ const Login = () => {
         <h1 style={{ margin: "-100px 0px 10px 0px" }}>Login</h1>
 
         {/* if there is message, notify as per API response otherwise null */}
-        {message ? (
-          <Alert
-            // if error is true set severity as error otherwise success
-            severity={error ? "error" : "success"}
-            style={{ margin: "20px 0px" }}
-          >
-            {message}
-          </Alert>
-        ) : null}
+        {message ? <Notifications error={error} message={message} /> : null}
 
         <TextField
           type="text"
