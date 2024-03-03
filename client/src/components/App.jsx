@@ -3,6 +3,7 @@ import Home from "./Home";
 import Register from "./Register";
 import Login from "./Login";
 import Navbar from "./Navbar";
+import UserFiles from "./UserFiles";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route exact path="/" element={<Home />} />
         <Route exact path="/register" element={<Register />} />
         <Route exact path="/login" element={<Login />} />
+        <Route exact path="/user/files" element={<UserFiles />} />
       </Routes>
     </div>
   );
