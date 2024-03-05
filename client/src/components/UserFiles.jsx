@@ -7,6 +7,7 @@ import download from "downloadjs";
 import byteToSize from "../utils/byteToSize";
 import isTokenExpired from "../utils/checkExpireToken";
 import Notifications from "./Notifications";
+import Loader from "./Loader";
 
 const UserFiles = () => {
   // state hooks for error and success messages
@@ -14,6 +15,7 @@ const UserFiles = () => {
   const [error, setError] = useState(false);
   // state hooks for setting user files
   const [files, setFiles] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   // get JWT/bearer token from localstorage
   const token = localStorage.getItem("token");
@@ -37,6 +39,9 @@ const UserFiles = () => {
   // get user files
   const getUserFiles = async () => {
     try {
+      // set loading to true
+      setLoading(true);
+
       // get response from server for getUserFiles API
       const response = await axios.get(
         "http://localhost:8000/getUserFiles",
@@ -58,6 +63,9 @@ const UserFiles = () => {
       setMessage(response.data.message);
       // set error as false
       setError(false);
+
+      // set loading to false
+      setLoading(false);
     } catch (err) {
       console.log(err);
 
@@ -141,6 +149,11 @@ const UserFiles = () => {
       setMessage(err.response.data.message);
     }
   };
+
+  // if loading, return Loader
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="container d-flex align-items-center justify-content-center flex-wrap">
