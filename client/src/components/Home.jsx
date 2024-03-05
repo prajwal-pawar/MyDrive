@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, ProgressBar } from "react-bootstrap";
 import axios from "axios";
 import Notifications from "./Notifications";
 import isTokenExpired from "../utils/checkExpireToken";
 
 const Home = () => {
   // state hooks for error and success messages
-  const [file, setFile] = useState();
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   // get JWT/bearer token from localstorage
   const token = localStorage.getItem("token");
@@ -56,6 +56,15 @@ const Home = () => {
             // sending authorization header to send JWT as bearer token to authorize file upload request
             Authorization: `Bearer ${token}`,
           },
+          // tracks file upload progress
+          onUploadProgress: (progressEvent) => {
+            // calculate the upload progress
+            const progress = Math.round(
+              (progressEvent.loaded / progressEvent.total) * 100
+            );
+
+            setUploadProgress(progress);
+          },
         }
       );
 
@@ -80,7 +89,7 @@ const Home = () => {
       <h1 className="mb-4">MyDrive</h1>
 
       {/* if there is message, notify as per API response otherwise null */}
-      {message ? <Notifications message={message} /> : null}
+      {message ? <Notifications error={error} message={message} /> : null}
 
       <Form.Group controlId="formFile" className="mb-3 mt-2 w-50">
         <Form.Label>Choose File to Upload</Form.Label>
@@ -94,6 +103,17 @@ const Home = () => {
       <Button variant="primary" onClick={uploadFiles}>
         Upload
       </Button>
+
+      <div className="mt-5 w-50">
+        {/* render progress bar only when there is progress */}
+        {uploadProgress > 0 && (
+          <ProgressBar
+            animated
+            now={uploadProgress}
+            label={`${uploadProgress} %`}
+          />
+        )}
+      </div>
     </div>
   );
 };

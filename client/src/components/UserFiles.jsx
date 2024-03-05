@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Card, Button } from "react-bootstrap";
 import axios from "axios";
 import moment from "moment";
@@ -144,8 +145,16 @@ const UserFiles = () => {
   return (
     <div className="container d-flex align-items-center justify-content-center flex-wrap">
       {/* if there is message, notify as per API response otherwise null */}
-      {message ? <Notifications message={message} /> : null}
+      {message ? <Notifications error={error} message={message} /> : null}
 
+      {/* if user has no uploaded files */}
+      {files.length == 0 && (
+        <h5 className="mt-5">
+          You have no files in your drive, <Link to="/">Upload here</Link>
+        </h5>
+      )}
+
+      {/* if user has uploaded files */}
       {files.map((file, i) => (
         <Card key={i} className="me-4 w-25 mt-4" style={{ height: "220px" }}>
           <Card.Body>
