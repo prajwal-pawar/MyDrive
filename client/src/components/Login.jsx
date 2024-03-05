@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Grid, TextField, Button } from "@mui/material";
+import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 import Notifications from "./Notifications";
 
@@ -16,8 +16,11 @@ const Login = () => {
   const navigate = useNavigate();
 
   // login user
-  const loginUser = async () => {
+  const loginUser = async (event) => {
     try {
+      // prevent default behaviour of form submit
+      event.preventDefault();
+
       // getting input values
       let username = usernameRef.current.value;
       let password = passwordRef.current.value;
@@ -51,49 +54,44 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <Grid
-        container
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="100vh"
-      >
-        <h1 style={{ margin: "-100px 0px 10px 0px" }}>Login</h1>
+    <div
+      className="container d-flex flex-column align-items-center justify-content-center"
+      style={{ minHeight: "100vh" }}
+    >
+      <h1 className="mb-4">Login</h1>
 
-        {/* if there is message, notify as per API response otherwise null */}
-        {message ? <Notifications error={error} message={message} /> : null}
+      {/* if there is message, notify as per API response otherwise null */}
+      {message ? <Notifications error={error} message={message} /> : null}
 
-        <TextField
-          type="text"
-          id="outlined-basic"
-          label="Username"
-          variant="outlined"
-          inputRef={usernameRef} // same as ref={usernameRef}
-          style={{ marginBottom: "10px" }}
-        />
-        <TextField
-          type="password"
-          id="outlined-basic"
-          label="Password"
-          variant="outlined"
-          inputRef={passwordRef} // same as ref={passwordRef}
-          style={{ marginBottom: "10px" }}
-        />
+      <Form onSubmit={loginUser} className="w-50">
+        <Form.Group className="mb-3" controlId="formUserName">
+          <Form.Label>Username</Form.Label>
+          <Form.Control
+            type="text"
+            ref={usernameRef}
+            placeholder="Enter Username"
+            required
+          />
+        </Form.Group>
 
-        <Button
-          variant="contained"
-          onClick={loginUser}
-          style={{ padding: "10px 20px" }}
-        >
-          Sign in
+        <Form.Group className="mb-3" controlId="formPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            type="password"
+            ref={passwordRef}
+            placeholder="Password"
+            required
+          />
+        </Form.Group>
+
+        <Button variant="primary" type="submit">
+          Login
         </Button>
+      </Form>
 
-        <Link to="/register" style={{ marginTop: "20px" }}>
-          Don't have an account?
-        </Link>
-      </Grid>
+      <Link to="/register" className="mt-5">
+        Don't have an account?
+      </Link>
     </div>
   );
 };

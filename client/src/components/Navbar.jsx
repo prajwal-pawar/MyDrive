@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Typography, Button, Grid } from "@mui/material";
+import { Navbar as Navigation, Container, Nav } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 
 const Navbar = () => {
@@ -15,65 +15,37 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static">
-      <Toolbar>
-        {/* left side */}
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          MyDrive
-        </Typography>
+    <Navigation bg="dark" data-bs-theme="dark">
+      <Container>
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <Navigation.Brand>MyDrive</Navigation.Brand>
+        </Link>
 
-        {/* right side */}
+        {/* if user is authenticated */}
         {token ? (
-          <Grid container spacing={2} justifyContent="flex-end">
-            <Grid item>
-              <Button color="inherit">
-                <Link to="/" style={{ textDecoration: "none", color: "#fff" }}>
-                  Home
-                </Link>
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button color="inherit">
-                <Link
-                  to="/user/files"
-                  style={{ textDecoration: "none", color: "#fff" }}
-                >
-                  Files
-                </Link>
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button color="inherit" onClick={logout}>
-                Logout
-              </Button>
-            </Grid>
-          </Grid>
+          <Nav className="ms-auto">
+            <Link to="/" className="nav-link">
+              Home
+            </Link>
+            <Link to="/user/files" className="nav-link">
+              Your Files
+            </Link>
+            <button className="nav-link" onClick={logout}>
+              Logout
+            </button>
+          </Nav>
         ) : (
-          <Grid container spacing={2} justifyContent="flex-end">
-            <Grid item>
-              <Button color="inherit">
-                <Link
-                  to="/register"
-                  style={{ textDecoration: "none", color: "#fff" }}
-                >
-                  Register
-                </Link>
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button color="inherit">
-                <Link
-                  to="/login"
-                  style={{ textDecoration: "none", color: "#fff" }}
-                >
-                  Login
-                </Link>
-              </Button>
-            </Grid>
-          </Grid>
+          <Nav className="ms-auto">
+            <Link to="/register" className="nav-link">
+              Register
+            </Link>
+            <Link to="/login" className="nav-link">
+              Login
+            </Link>
+          </Nav>
         )}
-      </Toolbar>
-    </AppBar>
+      </Container>
+    </Navigation>
   );
 };
 export default Navbar;

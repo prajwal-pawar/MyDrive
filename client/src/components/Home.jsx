@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Grid } from "@mui/material";
+import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 import Notifications from "./Notifications";
 import isTokenExpired from "../utils/checkExpireToken";
 
 const Home = () => {
   // state hooks for error and success messages
+  const [file, setFile] = useState();
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
 
@@ -75,33 +76,24 @@ const Home = () => {
   };
 
   return (
-    <div>
-      <h1 style={{ textAlign: "center", margin: "20px 0px" }}>MyDrive</h1>
+    <div className="container d-flex flex-column align-items-center justify-content-center mt-5">
+      <h1 className="mb-4">MyDrive</h1>
 
-      <Grid container display="flex" justifyContent="center">
-        {/* if there is message, notify as per API response otherwise null */}
-        {message ? <Notifications error={error} message={message} /> : null}
-      </Grid>
+      {/* if there is message, notify as per API response otherwise null */}
+      {message ? <Notifications message={message} /> : null}
 
-      <div style={{ textAlign: "center" }}>
-        <label htmlFor="uploadBtn">
-          <input
-            type="file"
-            id="uploadBtn"
-            style={{ display: "none" }}
-            ref={fileRef}
-            onChange={uploadFiles} // on changing file
-          />
-          <Button
-            color="primary"
-            variant="contained"
-            component="span"
-            style={{ marginBottom: "20px" }}
-          >
-            Upload Files
-          </Button>
-        </label>
-      </div>
+      <Form.Group controlId="formFile" className="mb-3 mt-2 w-50">
+        <Form.Label>Choose File to Upload</Form.Label>
+        <Form.Control
+          type="file"
+          ref={fileRef}
+          // onChange={uploadFiles} // on changing file
+        />
+      </Form.Group>
+
+      <Button variant="primary" onClick={uploadFiles}>
+        Upload
+      </Button>
     </div>
   );
 };

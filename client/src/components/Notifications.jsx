@@ -1,41 +1,37 @@
-import { useEffect, useState } from "react";
-import { Alert, Snackbar } from "@mui/material";
+import { useState, useEffect } from "react";
+import { ToastContainer, Toast } from "react-bootstrap";
 
-// MUI Toast notification
+// Toast notification
 const Notifications = (props) => {
   // destructuring props
   const { error, message } = props;
 
-  // hooks
-  const [open, setOpen] = useState(false);
+  const [show, setShow] = useState(false);
 
-  // close notification
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+  // When message changes, show the Toast
   useEffect(() => {
-    // set open to true when there's a message to display
     if (message) {
-      setOpen(true);
+      setShow(true);
     }
   }, [message]);
 
   return (
-    <Snackbar
-      open={open}
-      onClose={handleClose}
-      autoHideDuration={6000}
-      anchorOrigin={{ vertical: "top", horizontal: "center" }}
-    >
-      <Alert
-        // if error is true set severity as error otherwise success
-        severity={error ? "error" : "success"}
-        onClose={handleClose}
+    <ToastContainer className="p-3" position="top-center" style={{ zIndex: 1 }}>
+      <Toast
+        className="d-inline-block m-1"
+        bg={error ? "danger" : "success"}
+        show={show}
+        onClose={() => setShow(false)}
+        delay={3000}
+        autohide
       >
-        {message}
-      </Alert>
-    </Snackbar>
+        <Toast.Header>
+          <strong className="me-auto">{error ? "Error" : "Success"}</strong>
+          <small>MyDrive</small>
+        </Toast.Header>
+        <Toast.Body className="Dark && text-white">{message}</Toast.Body>
+      </Toast>
+    </ToastContainer>
   );
 };
 

@@ -1,13 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  CardActions,
-  Box,
-  Button,
-  Grid,
-} from "@mui/material";
+import { Card, Button } from "react-bootstrap";
 import axios from "axios";
 import moment from "moment";
 import download from "downloadjs";
@@ -150,66 +142,47 @@ const UserFiles = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        margin: "20px 20px",
-      }}
-    >
-      <Grid container display="flex" justifyContent="center">
-        {/* if there is message, notify as per API response otherwise null */}
-        {message ? <Notifications error={error} message={message} /> : null}
-      </Grid>
+    <div className="container d-flex align-items-center justify-content-center flex-wrap">
+      {/* if there is message, notify as per API response otherwise null */}
+      {message ? <Notifications message={message} /> : null}
 
-      {/* map or search through user files */}
       {files.map((file, i) => (
-        <Card
-          sx={{
-            margin: "20px",
-            width: "300px",
-            height: "250px",
-            maxHeight: "250px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-          }}
-          key={i}
-        >
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
+        <Card key={i} className="me-4 w-25 mt-4" style={{ height: "220px" }}>
+          <Card.Body>
+            <Card.Title
+              style={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
               {file.name}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {file.type}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
+            </Card.Title>
+            <Card.Text>
+              {/* file type */}
+              {file.type} <br />
               {/* converting file size from KB to MB */}
-              {byteToSize(file.size)}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {/* {file.updatedAt} */}
+              {byteToSize(file.size)} <br />
+              {/* date */}
               {moment(file.updatedAt).format("Do MMMM YYYY")}
-            </Typography>
-          </CardContent>
+            </Card.Text>
+          </Card.Body>
 
-          <CardActions>
-            <Button size="small" onClick={() => downloadUserFile(file)}>
+          <Card.Footer className="d-flex justify-content-between align-items-center">
+            <Button
+              variant="primary"
+              onClick={() => downloadUserFile(file)}
+              className="me-4 mt-auto"
+            >
               Download
             </Button>
-            {/* <Button size="small" onClick={() => deleteUserFiles(file.name)}> */}
-            <Button
-              size="small"
-              color="error"
-              onClick={() => deleteUserFiles(file)}
-            >
+            <Button variant="danger" onClick={() => deleteUserFiles(file)}>
               Delete
             </Button>
-          </CardActions>
+          </Card.Footer>
         </Card>
       ))}
-    </Box>
+    </div>
   );
 };
 
